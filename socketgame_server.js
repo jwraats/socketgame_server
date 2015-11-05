@@ -1,6 +1,5 @@
+var fs = require('fs')
 var ws = require("nodejs-websocket")
-
-var orientatedSide = []; 
 var connections = 0;
 
 
@@ -13,22 +12,28 @@ function isValidJson(text){
 	return false;
 }
 
+var options = {
+	secure: true,
+	key: fs.readFileSync("key.pem"),
+	cert: fs.readFileSync("cert.pem")
+}
+
 //Creating the server..
-var server = ws.createServer(function (conn) {
+var server = ws.createServer(options, function (conn) {
     connections++;
     var id = connections;
 	console.log(connections);
     conn.on("text", function (str) {
 		if(isValidJson(str)){
-				console.log(JSON.parse(str));
+			console.log(JSON.parse(str));
 		}else{
-		console.log("Geen valide JSON: "+ str);
+			console.log("Geen valide JSON: "+ str);
 		}
 		
 	});
 
     conn.on("close", function (code, reason) {
-       	delete orientatedSide[id];
+		//Connectie is gesloten
     });
 
 }).listen(4141)
