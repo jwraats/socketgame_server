@@ -29,3 +29,4 @@ node_modules
 #added keys to the ignore
 key.pem
 cert.pem
+csr.pem
