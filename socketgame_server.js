@@ -1,4 +1,4 @@
-var fs = require('fs')
+//var fs = require('fs')
 var ws = require("nodejs-websocket")
 var connections = 0;
 
@@ -13,9 +13,7 @@ function isValidJson(text){
 }
 
 var options = {
-	secure: true,
-	key: fs.readFileSync("key.pem"),
-	cert: fs.readFileSync("cert.pem")
+	secure: false
 }
 
 //Creating the server..
@@ -31,6 +29,11 @@ var server = ws.createServer(options, function (conn) {
 		}
 		
 	});
+	
+	conn.on("error", function (code, reason) {
+		//Connectie is gesloten
+		console.log(reason);
+    });
 
     conn.on("close", function (code, reason) {
 		//Connectie is gesloten
